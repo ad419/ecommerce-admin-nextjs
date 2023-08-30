@@ -61,7 +61,7 @@ export function TabBar() {
     >
       <ul className="flex flex-wrap -mb-px">
         {routes.slice(0, 4).map((route) => (
-          <li className="mr-2">
+          <li className="mr-2" key={route.href}>
             <Link
               href={route.href}
               className={cn(
