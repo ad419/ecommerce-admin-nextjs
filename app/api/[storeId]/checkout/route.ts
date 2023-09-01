@@ -40,7 +40,7 @@ export async function POST(
         currency: "USD",
         product_data: {
           name: product.name,
-          images: [product.images[0].url],
+          images: product.image,
         },
         unit_amount: product.price.toNumber() * 100,
       },

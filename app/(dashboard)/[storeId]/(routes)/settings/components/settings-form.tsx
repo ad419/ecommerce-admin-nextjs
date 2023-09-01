@@ -9,6 +9,7 @@ import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -27,15 +28,20 @@ import { useOrigin } from "@/hooks/use-origin";
 
 interface SettingsFormProps {
   initialData: Store;
+  stores: Store[];
 }
 
 const formSchema = z.object({
   name: z.string().min(1),
+  activated: z.boolean().optional().default(false),
 });
 
 type settingsFormValues = z.infer<typeof formSchema>;
 
-export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
+export const SettingsForm: React.FC<SettingsFormProps> = ({
+  initialData,
+  stores,
+}) => {
   const params = useParams();
   const router = useRouter();
   const origin = useOrigin();
@@ -52,6 +58,20 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const onSubmit = async (data: settingsFormValues) => {
     try {
       setLoading(true);
+
+      // dont allow user to activate more than one store
+
+      if (data.activated) {
+        const activeStore = stores.find((store) => store.activated);
+
+        if (activeStore && activeStore.id !== params.storeId) {
+          toast.error("You can only activate one store at a time.");
+          // set checked to false
+          form.setValue("activated", false);
+          return;
+        }
+      }
+
       await axios.patch(`/api/stores/${params.storeId}`, data);
       router.refresh();
       toast.success("Store updated.");
@@ -103,7 +123,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid  gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -115,6 +135,24 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                       disabled={loading}
                       placeholder="Store name"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="activated"
+              render={({ field }: { field: any }) => (
+                <FormItem className="flex items-end">
+                  <FormLabel>Activated</FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      className="ml-2"
+                      checked={field.value}
+                      disabled={loading}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

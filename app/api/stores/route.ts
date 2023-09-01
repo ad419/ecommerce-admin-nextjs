@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name } = body;
+    const { name, activated } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
     const store = await prismadb.store.create({
       data: {
         name,
+        activated,
         userId,
       },
     });
