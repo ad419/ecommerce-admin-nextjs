@@ -35,7 +35,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="h-screen w-full">
+    <div className="w-full">
       <Navbar />
       {children}
       <div
