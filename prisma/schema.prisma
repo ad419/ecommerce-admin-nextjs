@@ -21,9 +21,10 @@ model Store {
   colors     Color[]     @relation("StoreToColor")
   products   Product[]   @relation("StoreToProduct")
   orders     Order[]     @relation("StoreToOrder")
-  activated Boolean     @default(false) 
+  activated  Boolean     @default(false)
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  Cupon      Cupon[]
 }
 
 model Billboard {
@@ -140,4 +141,27 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String   
+  email     String    @unique @default(uuid())
+  password  String   
+  phone     String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cupon {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id])
+  name      String
+  value     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
 }
