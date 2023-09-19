@@ -4,9 +4,8 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
   publicRoutes: [
     "/",
-    "/sign-in",
-    "/88e3a88e-561f-473d-b88a-2780c6fc6a76/billboards",
-    "/88e3a88e-561f-473d-b88a-2780c6fc6a76/billboards/new",
+    "/billboards",
+    "/billboards/new",
     "/api/:path*",
   ],
   secretKey: process.env.CLERK_SECRET_KEY,
