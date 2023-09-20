@@ -21,7 +21,7 @@ model Store {
   colors     Color[]     @relation("StoreToColor")
   products   Product[]   @relation("StoreToProduct")
   orders     Order[]     @relation("StoreToOrder")
-  Cupon      Cupon[]
+  cupon      Cupon[]     @relation("StoreToCupon")
 }
 
 model Billboard {
@@ -144,15 +144,17 @@ model Cupon {
   id          String    @id @default(uuid())
   storeId     String
   name        String
-  value       Int
+  value       String
   createdAt   DateTime  @default(now())
   claimed     Boolean   @default(false)
   claimedAt   DateTime?
-  claimedById String[]
   expiresAt   DateTime
-  store       Store     @relation(fields: [storeId], references: [id])
+  claimedById String[]
+  activated   Boolean   @default(false)
+  store       Store     @relation("StoreToCupon", fields: [storeId], references: [id])
+  users       User[]    @relation("UserToCupon")
 
-  @@index([storeId, claimedById])
+  @@index([storeId])
 }
 
 model Account {
@@ -186,6 +188,7 @@ model User {
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())
+  cupons        Cupon[]   @relation("UserToCupon")
 }
 
 model VerificationToken {
@@ -194,4 +197,13 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model UserToCupon {
+  A String
+  B String
+
+  @@unique([A, B], map: "_UserToCupon_AB_unique")
+  @@index([B], map: "_UserToCupon_B_index")
+  @@map("_UserToCupon")
 }
