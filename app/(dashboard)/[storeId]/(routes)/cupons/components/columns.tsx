@@ -8,6 +8,7 @@ export type CuponColumn = {
   name: string;
   value: string;
   countdown: any;
+  code: string;
   activated: boolean;
   createdAt: string;
   expiresAt: string;
@@ -37,6 +38,10 @@ export const columns: ColumnDef<CuponColumn>[] = [
   {
     accessorKey: "activated",
     header: "Activated ",
+  },
+  {
+    accessorKey: "code",
+    header: "Code ",
   },
   {
     id: "actions",

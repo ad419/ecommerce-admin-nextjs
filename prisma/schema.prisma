@@ -150,6 +150,7 @@ model Cupon {
   claimedAt   DateTime?
   expiresAt   DateTime
   claimedById String[]
+  code       String?
   activated   Boolean   @default(false)
   store       Store     @relation("StoreToCupon", fields: [storeId], references: [id])
   users       User[]    @relation("UserToCupon")

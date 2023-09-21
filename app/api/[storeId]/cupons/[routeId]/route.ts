@@ -4,16 +4,16 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { cuponId: string } }
+  { params }: { params: { routeId: string } }
 ) {
   try {
-    if (!params.cuponId) {
+    if (!params.routeId) {
       return new NextResponse("Cupon id is required", { status: 400 });
     }
 
     const cupon = await prismadb.cupon.findUnique({
       where: {
-        id: params.cuponId,
+        id: params.routeId,
       },
     });
     return NextResponse.json(cupon);
@@ -25,13 +25,13 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { cuponId: string; storeId: string } }
+  { params }: { params: { routeId: string; storeId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
-
-    const { name, value, expiresAt } = body;
+    console.log(params, body);
+    const { name, value, expiresAt, activated, code } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -45,7 +45,7 @@ export async function PATCH(
       return new NextResponse("Value is required", { status: 400 });
     }
 
-    if (!params.cuponId) {
+    if (!params.routeId) {
       return new NextResponse("Cupon id is required", { status: 400 });
     }
 
@@ -62,11 +62,13 @@ export async function PATCH(
 
     const cupon = await prismadb.cupon.updateMany({
       where: {
-        id: params.cuponId,
+        id: params.routeId,
       },
       data: {
         name,
         value,
+        activated,
+        code,
         expiresAt,
       },
     });
@@ -80,7 +82,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { cuponId: string; storeId: string } }
+  { params }: { params: { routeId: string; storeId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -88,7 +90,7 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (!params.cuponId) {
+    if (!params.routeId) {
       return new NextResponse("Cupon id is required", { status: 400 });
     }
 
@@ -105,7 +107,7 @@ export async function DELETE(
 
     const cupon = await prismadb.cupon.deleteMany({
       where: {
-        id: params.cuponId,
+        id: params.routeId,
       },
     });
     return NextResponse.json(cupon);

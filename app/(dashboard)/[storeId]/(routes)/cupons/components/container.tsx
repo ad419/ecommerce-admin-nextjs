@@ -10,8 +10,8 @@ const Container = ({ cupons }: { cupons: any }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const expiresAt = cupons[0].expiresAt;
-      const diff = expiresAt.getTime() - now.getTime();
+      const expiresAt = cupons[0]?.expiresAt;
+      const diff = expiresAt?.getTime() - now.getTime();
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -32,11 +32,11 @@ const Container = ({ cupons }: { cupons: any }) => {
     value: item.value,
     countdown: countdown,
     activated: item.activated,
+    code: item.code,
     expiresAt: format(item.expiresAt, "MMMM do, yyyy"),
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
   const params = useParams();
-  console.log(formattedSizes);
   // memorize the component
 
   return (

@@ -46,6 +46,7 @@ const formSchema = z.object({
     message: "Expected number, received a string",
   }),
   activated: z.boolean().optional().default(false),
+  code: z.string().min(1).max(10) as any,
   expiresAt: z.date().min(new Date()),
 });
 
@@ -69,6 +70,7 @@ export const CuponForm: React.FC<CuponFormProps> = ({ initialData }) => {
       name: "",
       value: "",
       activated: false,
+      code: "",
       expiresAt: new Date(),
     },
   });
@@ -173,12 +175,48 @@ export const CuponForm: React.FC<CuponFormProps> = ({ initialData }) => {
                 </FormItem>
               )}
             />
+            <div className="flex items-start gap-2">
+              <div className="flex items-end gap-2">
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Code</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="w-[240px]"
+                          disabled={loading}
+                          placeholder="Cupon code"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/*
+                button to generate a random code for the cupon and fill the input
+              */}
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    form.setValue(
+                      "code",
+                      Math.random().toString(36).substr(2, 9)
+                    )
+                  }
+                >
+                  Generate
+                </Button>
+              </div>
+            </div>
             <FormField
               control={form.control}
               name="expiresAt"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date of birth</FormLabel>
+                  <FormLabel>Cupon expire date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

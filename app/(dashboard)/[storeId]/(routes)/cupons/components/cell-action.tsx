@@ -25,7 +25,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
     toast.success("Cupon Id copied to the clipboard.");
@@ -66,6 +65,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
             <Copy className="mr-2 h-4 w-4" />
             Copy Id
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onCopy(data.code)}>
+            <Copy className="mr-2 h-4 w-4" />
+            Copy Code
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push(`/${params.storeId}/cupons/${data.id}`)}
