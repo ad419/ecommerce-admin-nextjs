@@ -24,7 +24,7 @@ const BillboardPage = async ({
 
   const billboards = await prismadb.billboard.findMany({
     where: {
-      storeId: store.id,
+      storeId: store?.id,
     },
   });
 

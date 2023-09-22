@@ -176,7 +176,7 @@ export const CuponForm: React.FC<CuponFormProps> = ({ initialData }) => {
               )}
             />
             <div className="flex items-start gap-2">
-              <div className="flex items-end gap-2">
+              <div className="flex items-end">
                 <FormField
                   control={form.control}
                   name="code"
@@ -200,12 +200,13 @@ export const CuponForm: React.FC<CuponFormProps> = ({ initialData }) => {
               */}
                 <Button
                   variant="outline"
-                  onClick={() =>
-                    form.setValue(
-                      "code",
-                      Math.random().toString(36).substr(2, 9)
-                    )
-                  }
+                  onClick={(e: any) => {
+                    e.preventDefault(),
+                      form.setValue(
+                        "code",
+                        Math.random().toString(36).substr(2, 9)
+                      );
+                  }}
                 >
                   Generate
                 </Button>

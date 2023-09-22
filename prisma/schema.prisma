@@ -141,19 +141,18 @@ model OrderItem {
 }
 
 model Cupon {
-  id          String    @id @default(uuid())
-  storeId     String
-  name        String
-  value       String
-  createdAt   DateTime  @default(now())
-  claimed     Boolean   @default(false)
-  claimedAt   DateTime?
-  expiresAt   DateTime
-  claimedById String[]
-  code       String?
-  activated   Boolean   @default(false)
-  store       Store     @relation("StoreToCupon", fields: [storeId], references: [id])
-  users       User[]    @relation("UserToCupon")
+  id        String    @id @default(uuid())
+  storeId   String
+  name      String
+  value     String
+  createdAt DateTime  @default(now())
+  claimed   Boolean   @default(false)
+  claimedAt DateTime?
+  expiresAt DateTime
+  activated Boolean   @default(false)
+  code      String?
+  store     Store     @relation("StoreToCupon", fields: [storeId], references: [id])
+  users     User[]    @relation("UserToCupon")
 
   @@index([storeId])
 }
@@ -201,10 +200,8 @@ model VerificationToken {
 }
 
 model UserToCupon {
-  A String
-  B String
+  userId  String
+  cuponId String
 
-  @@unique([A, B], map: "_UserToCupon_AB_unique")
-  @@index([B], map: "_UserToCupon_B_index")
-  @@map("_UserToCupon")
+  @@id([userId, cuponId])
 }
