@@ -6,11 +6,11 @@ import { UserColumn, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { ApiList } from "@/components/ui/api-list";
 
-interface ColorClientProps {
+interface CustomerClientProps {
   data: UserColumn[];
 }
 
-export const ColorClient: React.FC<ColorClientProps> = ({ data }) => {
+export const CustomerClient: React.FC<CustomerClientProps> = ({ data }) => {
   return (
     <>
       <div className="flex items-center justify-between">

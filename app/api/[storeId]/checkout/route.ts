@@ -33,14 +33,13 @@ export async function POST(
 
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-  products.forEach((product: any) => {
+  products.forEach((product) => {
     line_items.push({
       quantity: 1,
       price_data: {
         currency: "USD",
         product_data: {
           name: product.name,
-          images: product.image,
         },
         unit_amount: product.price.toNumber() * 100,
       },
@@ -50,7 +49,7 @@ export async function POST(
   const order = await prismadb.order.create({
     data: {
       storeId: params.storeId,
-      isPaid: true,
+      isPaid: false,
       orderItems: {
         create: productIds.map((productId: string) => ({
           product: {
@@ -70,25 +69,12 @@ export async function POST(
     phone_number_collection: {
       enabled: true,
     },
-    success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
-    cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`,
+    success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1?id=${order.id}`,
+    cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1?id=${order.id}`,
     metadata: {
       orderId: order.id,
     },
   });
-
-  // update order isPaid to true if session is successful
-
-  if (session.payment_status === "paid") {
-    await prismadb.order.update({
-      where: {
-        id: session?.metadata?.orderId,
-      },
-      data: {
-        isPaid: true,
-      },
-    });
-  }
 
   return NextResponse.json({ url: session.url }, { headers: corsHeaders });
 }

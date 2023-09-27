@@ -1,10 +1,10 @@
 import prismadb from "@/lib/prismadb";
-import { ColorClient } from "./components/client";
+import { CustomerClient } from "./components/client";
 import { UserColumn } from "./components/columns";
 import { format } from "date-fns";
 
-const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
-  const user = await prismadb.user.findMany({});
+const CustomersPage = async ({ params }: { params: { storeId: string } }) => {
+  const user = await prismadb.user.findMany();
 
   const formattedColors: UserColumn[] = user.map((item) => ({
     id: item.id,
@@ -17,10 +17,10 @@ const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ColorClient data={formattedColors} />
+        <CustomerClient data={formattedColors} />
       </div>
     </div>
   );
 };
 
-export default ColorsPage;
+export default CustomersPage;
